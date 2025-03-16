@@ -1,0 +1,113 @@
+@extends('app')
+@section('content')
+
+@Auth
+    <div class="container">
+    <a href="/lista" class="btn btn-secondary mb-3 " style="margin-left: 500px;margin-top: 10px;"><h5 class="text">← Volver a la Lista</h5></a>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            Editar Planeta
+        </div>
+        <div class="card-body">
+            <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" name="name" value="{{ $post->name }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="size" class="form-label">Tamaño</label>
+                    <input type="number" class="form-control" name="size" value="{{ $post->size }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <textarea class="form-control" name="description" rows="3" required>{{ $post->description }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="moons" class="form-label">Lunas</label>
+                    <input type="number" class="form-control" name="moons" value="{{ $post->moons }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="position" class="form-label">Posición</label>
+                    <input type="number" class="form-control" name="position" value="{{ $post->position }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageInput" class="form-label">Imagen</label>
+                    <input type="file" class="form-control" id="imageInput" name="image" accept="image/*">
+                    <div class="mt-3">
+                        <label class="form-label">Imagen Actual:</label><br>
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="Imagen actual" class="img-thumbnail" style="max-width: 200px;">
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Vista Previa de la Nueva Imagen:</label><br>
+                        <img id="preview" class="img-thumbnail" src="" alt="Vista previa de la imagen" style="display: none; max-width: 200px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-secondary mb-3 " style="color: gray; font-family: Arial, Helvetica, sans-serif;"><h5 class="text">Actualizar</h5></button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+<style>
+
+    .mb-3{
+        color: white;
+
+    }
+    .card {
+
+        padding: 10%;
+        box-shadow: 10px 10px rgba(128, 128, 128, 0.24);
+
+
+        border: solid 2px rgba(255, 255, 255, 0.562);
+        border-radius: 30px;
+
+    }
+    .btn{
+        background-color: white;
+        .text{
+        color: gray;
+
+
+        position: relative;
+    }
+
+    }
+    .btn:hover{
+        background-color: rgba(0, 0, 0, 0);
+        .text{
+            color: white;
+    }}
+
+</style>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    @endAuth
+@endsection
